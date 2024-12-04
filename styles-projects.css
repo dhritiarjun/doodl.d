@@ -1,0 +1,195 @@
+/* Global styles */
+body {
+    font-family: 'Questrial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fb14b8;
+    color: #333;
+}
+
+.navbar {
+    background-color: rgb(29, 6, 200); 
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Style the navbar links list */
+.nav-links {
+    list-style: none;
+    display: flex;
+    justify-content: space-evenly;  /* Center the links */
+    align-items: center;
+}
+
+/* Style each link in the navbar */
+.nav-links li {
+    margin: 0 15px; /* Space out the links */
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #fff; /* White text */
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+/* Hover effect for the links */
+.nav-links a:hover {
+    color: #ffcc00; /* Change color on hover */
+}
+
+
+strong{
+    color:rgb(29, 6, 200);
+}
+
+/* About Image */
+.about-img {
+    position: fixed; /* Fix image to the left side */
+    top: 80px; /* Make sure it's below the navbar */
+    left: 0;
+    width: 50%; /* Keep the image size fixed */
+    height: 700px;
+    overflow: hidden;
+}
+
+.about-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Main container */
+.main-container {
+    display: flex;
+    justify-content: flex-start; /* Align text to the right of the image */
+    padding: 100px 2rem 2rem 2rem; /* Space for navbar */
+    margin-left: 50%; /* Start the text container at the right of the image */
+}
+
+/* Left column styles (text container) */
+.left-column {
+    flex: 1;
+    background-color: transparent;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 50%; /* Text takes the right half */
+}
+
+.left-column h1 {
+    font-size: 2.5rem;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+}
+
+/* Achievement Box */
+.achievement-box {
+    background-color: #f0f0f0; /* Light background for the achievement box */
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-style: solid;
+}
+
+/* About feature sections */
+.about-feature {
+    margin-bottom: 2rem;
+}
+
+.about-feature h2 {
+    font-size: 1.8rem;
+    color: rgb(29, 6, 200);
+    margin-bottom: 1rem;
+}
+
+.about-feature p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+.about-feature strong {
+    font-weight: bold;
+}
+
+/* About feature subsection */
+.about-feature h3 {
+    font-size: 1.2rem;
+    color: rgb(29, 6, 200);
+    margin-top: 1rem;
+}
+
+/* Responsive Design */
+
+
+/* Dropdown Titles */
+.dropdown-title {
+    cursor: pointer;
+    margin: 0;
+    font-size: 1.8rem;
+    color: rgb(29, 6, 200);
+    margin-bottom: 1rem;
+    transition: color 0.3s;
+}
+
+.dropdown-title:hover {
+    color: #fb14b8; /* Slightly darker shade for hover effect */
+}
+
+/* Dropdown Content */
+.dropdown-content {
+    display: none; /* Hidden by default */
+    overflow: hidden; /* Prevent content from overflowing */
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+/* Open state for dropdown */
+.dropdown-content.open {
+    display: block; /* Make the content visible when open */
+}
+
+
+/* Responsive Design */
+/* Responsive Design */
+@media (max-width: 768px) {
+
+    .left-column h1{
+        color:#fb14b8;
+        background-color: rgb(29, 6, 200); /* Highlight background color */
+        padding: 0.5rem 1rem; /* Add space around the text */
+        display: inline-block;
+    }
+
+    .navbar {
+        padding: 0.5rem;
+    }
+
+    .about-img {
+        display: none; /* Hide the fixed image container on small screens */
+    }
+
+    .main-container {
+        background-image: url('./assets/about-me.PNG'); /* Use the image as background */
+        background-size: cover; /* Ensure the image covers the container */
+        background-position: center; /* Center the image */
+        color: #fff; /* Set text to white for readability */
+        padding: 2rem 1rem; /* Add padding for text spacing */
+        margin: 0; /* Remove left margin */
+    }
+
+    .left-column {
+        width: 100%; /* Full width for the text container */
+        padding: 1.5rem;
+        border-radius: 10px; /* Optional: Add some rounding for aesthetic */
+    }
+
+    .achievement-box {
+        background-color: rgba(255, 255, 255, 0.8); /* Light, semi-transparent background */
+        color: #333; /* Ensure text is readable against white background */
+    }
+}

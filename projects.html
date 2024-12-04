@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <link rel="stylesheet" href="styles-projects.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Image is now outside the main container to remain fixed -->
+    <div class="about-img">
+        <img src="./assets/about-me.PNG" alt="About Me">
+    </div>
+
+    <div class="main-container">
+        <div class="left-column">
+            <h1>Projects</h1>
+    
+            <!-- Work Experience -->
+            <div class="achievement-box">
+                <h2 class="dropdown-title">Bachelor Thesis</h2>
+                <div class="dropdown-content">
+
+                    <p><strong>Grade Received: 9 (90%)</strong> 
+                        The thesis aims to assess and evaluate existing machine learning methods such as sentiment analysis and image-based forecasting in fashion trend predictions.
+                        The end goal is to generate a novel ML model  for better trend prediction in fashion retailing
+                        Approaches used:
+                        Fashion trend forecasting systems using techniques like R-CNNs, logistic regression, multivariate attention fusion in addition to other techniques.
+                        Natural language processing (NLP) for social media sentiment analysis
+                        Image classification and analysis using unsupervised object detection and fashion image segmentation and labelling</p>
+                </div>
+            </div>
+    
+            <div class="achievement-box">
+                <h2 class="dropdown-title">Coursework</h2>
+                <div class="dropdown-content">
+                    <p><strong> Big Data (2022):</strong> <br>
+                        Used Python, Jupyter Notebook, Dask, Pandas, Matplotlib and Plotly to visualise and analyse kickstarter data scrapes.
+                        See final project <a href="https://github.com/andrei-chiana/big_data_kickstarter_project">here</a>.</p></p>
+                    <p><strong> Programming in Python (2022):</strong> <br>
+                        Arcade style shooting game using Object oriented programming.
+                        See final project <a href="https://github.com/dhritiarjun/shootingthehangman">here</a>.</p>
+                </div>
+            </div>
+    
+            <div class="achievement-box">
+                <h2 class="dropdown-title">Leadership</h2>
+                <div class="dropdown-content">
+                    <p><strong>Music:</strong><br>
+                        I led a team in collaboration with the UN office of drugs and crime to combat misinformation and cybercrime in the pandemic.
+                        I did the website design and promotional content, and performed a series of 7 promotional solo concerts, reaching 5000+ views.
+                        I have been formally trained for over 8 years in Western vocals and piano, and performed 45+ solo live music concerts for over a month with 10000+ views on Instagram</p>
+
+                    <p><strong>Art: Chiaroscuro Art festival, India (2019-2021)</strong>
+                        I was the visual arts team leader for a country-wide arts festival attended by over 25 premier schools in the country with over 100 contributing artists.
+                        I managed team of 10+ members, and designed all the visuals, themes and social media content</p>
+                    </p>
+                </div>
+            </div>
+    
+            <div class="achievement-box">
+                <h2 class="dropdown-title">Social Initiatives</h2>
+                <div class="dropdown-content">
+                    <p><strong> Founder: Postcolonial Perspectives Book Club (September 2023 - July 2024) </strong> 
+                        I founded a university book club focused on decolonising our reading habits in collaboration with the literature professor at our university. 
+                        We organised over 30 events discussing seminal work in postcolonial literature and theoretical work, moderated and presented weekly by me.
+                    </p>
+
+                    <p><strong>Events Committee Board Member: Groningen Feminist Network (February 2023 - May 2024)</strong>
+                        We organised weekly educational, social and collaborative events promoting the feminist space in Groningen, Netherlands. As a board member, 
+                        I managed the events end to end with a team of four where I designed the social media content, organised the space, and moderated discussions.
+                        We additonally planned collaborative events with other activist groups such as events and parades hosting 300+ attendees.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Select all dropdown titles
+        const dropdownTitles = document.querySelectorAll('.dropdown-title');
+    
+        // Add click event listener to each title
+        dropdownTitles.forEach(title => {
+            title.addEventListener('click', () => {
+                const content = title.nextElementSibling; // Find the corresponding content
+                content.classList.toggle('open'); // Toggle the "open" class
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+    
+
+
+
+
+    
+

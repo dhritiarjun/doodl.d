@@ -1,0 +1,125 @@
+body {
+    background-image: url('./assets/jlfs.jpg');
+    background-size: cover; 
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+html, body {
+    height: 100%; 
+    margin: 0; 
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Questrial";
+}
+
+img {
+    max-width: 100%; 
+    height: auto;    
+    display: block;  
+    margin: 0 auto;  
+    margin-bottom: 0px;
+}
+
+.gif-container {
+    position: relative; }
+
+
+.popup {
+    background-color: rgba(255, 255, 255, 1); /* Slight transparency */
+    border-radius: 8px;
+    border-style: solid;
+    border-color: black;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 600px;
+    position: absolute;  /* Absolute positioning */
+    bottom: 20px;  /* Position it 20px above the bottom of the container */
+    left: 50%;  /* Center it horizontally */
+    transform: translateX(-50%);  /* Adjust to exactly center the box */
+    z-index: 1;  /* Ensure the box appears above the GIF */
+    text-align: center;
+}
+
+.popup p {
+    font-size: 0.9rem;
+    color: #333;
+    line-height: 1.2;
+}
+
+.navbar {
+    background-color: rgb(29, 6, 200); 
+    padding: 35px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Style the navbar links list */
+.nav-links {
+    list-style: none;
+    display: flex;
+    justify-content: space-evenly;  /* Center the links */
+    align-items: center;
+}
+
+/* Style each link in the navbar */
+.nav-links li {
+    margin: 0 15px; /* Space out the links */
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #fff; /* White text */
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+/* Hover effect for the links */
+.nav-links a:hover {
+    color: #ffcc00; /* Change color on hover */
+}
+
+
+
+.popup {
+    background-color: rgba(255, 255, 255, 1); 
+    border-radius: 8px;
+    border-style: solid;
+    border-color: black;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 600px;
+    position: absolute;  
+    bottom: 20px;  
+    left: 50%;  
+    transform: translateX(-50%);  
+    z-index: 1;  
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .popup {
+        position: static; /* Removes absolute positioning */
+        margin: 20px; /* Adds space around the box */
+        max-width: 90%; /* Makes the box smaller on smaller screens */
+        transform: none; /* Resets centering transform */
+        bottom: auto; /* Resets the bottom positioning */
+        left: auto; /* Resets the left positioning */
+    }
+
+    .gif-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    img {
+        width: 100%; /* Ensures the GIF scales down */
+        max-width: 500px; /* Sets a reasonable limit for large screens */
+    }
+}

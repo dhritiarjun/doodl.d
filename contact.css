@@ -1,0 +1,75 @@
+
+
+.navbar {
+  background-color: rgb(29, 6, 200);
+  padding: 35px;
+  width: 100%; /* Span full width of the viewport */
+  position: fixed; /* Fix it to the top */
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add a slight shadow */
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  justify-content: space-evenly;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  margin: 0 10px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #ffcc00;
+}
+
+
+body {
+  display: flex;
+  flex-direction: row; /* Stack the navbar and content vertically */
+  align-items: center;
+  margin: 0;
+  font-family: 'Questrial', sans-serif;
+  background-color: #fb14b8;
+  min-height: 100vh; /* Ensure body takes at least full viewport height */
+
+}
+
+.phone {
+  display: flex; /* Make the container a flex container */
+  justify-content: center; /* Center the image horizontally */
+  align-items: center; /* Center the image vertically */
+  position: relative; /* Allows better control for positioning */
+  top: 100px; /* Adjust for navbar height */
+  width: 100%; /* Make the container span the full width */
+  height: calc(100vh - 100px); /* Make it fill the screen minus the navbar height */
+}
+
+.responsive-image {
+  max-width: 80%; /* Scale the image down proportionally */
+  max-height: 80%; /* Prevent the image from being too tall */
+  height: auto; /* Maintain aspect ratio */
+  display: block; /* Center it within the container */
+  margin: auto; /* Ensure it aligns properly in all contexts */
+  animation: gentleBounce 3s infinite ease-in-out;
+}
+
+
+@keyframes gentleBounce {
+  0%, 100% {
+    transform: translateY(0); /* Start and end at the original position */
+  }
+  50% {
+    transform: translateY(-15px); /* Move up gently */
+  }
+}

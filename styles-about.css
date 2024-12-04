@@ -1,0 +1,67 @@
+/* Global styles */
+body {
+    font-family: 'Questrial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fb14b8;
+    color: #333;
+}
+
+.navbar {
+    background-color: rgb(29, 6, 200); 
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    justify-content: space-evenly;  /* Center the links */
+    align-items: center;
+}
+
+.nav-links li {
+    margin: 0 15px; /* Space out the links */
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #fff; /* White text */
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #ffcc00; /* Change color on hover */
+}
+
+body{
+    background-image: url("./Screenshot\ 2024-11-26\ at\ 12.28.55\ AM.png");
+
+}
+h1{
+    margin-left: 70px;
+    color:  rgb(29, 6, 200);
+    font-size: 150px;
+}
+
+strong{
+    color:rgb(29, 6, 200);
+    font-weight: 400;
+}
+
+
+
+.achievement-box{
+    background-color: #fff;
+    border-style: solid, black;
+    margin-left:70px;
+    margin-right:60px;
+    border-radius: 30px;
+    padding: 15px;
+    margin-bottom: 40px;
+    border-style: solid;
+}
+
