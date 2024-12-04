@@ -41,10 +41,11 @@ body{
     background-image: url("./Screenshot\ 2024-11-26\ at\ 12.28.55\ AM.png");
 
 }
+
 h1{
     margin-left: 70px;
     color:  rgb(29, 6, 200);
-    font-size: 150px;
+    font-size: 90px;
 }
 
 strong{
@@ -57,11 +58,13 @@ strong{
 .achievement-box{
     background-color: #fff;
     border-style: solid, black;
+    line-height: 1.5;
     margin-left:70px;
-    margin-right:60px;
+    margin-right:20%;
     border-radius: 30px;
-    padding: 15px;
+    padding: 25px;
     margin-bottom: 40px;
     border-style: solid;
+    
 }
 

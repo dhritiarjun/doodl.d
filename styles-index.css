@@ -84,7 +84,13 @@ img {
     color: #ffcc00; /* Change color on hover */
 }
 
-
+.copyright{
+    color:white;
+    margin-bottom:0px;
+    padding:0px;
+    text-align: center;
+    position:sticky;
+}
 
 .popup {
     background-color: rgba(255, 255, 255, 1); 
@@ -99,6 +105,7 @@ img {
     left: 50%;  
     transform: translateX(-50%);  
     z-index: 1;  
+    line-height:1.5;
     text-align: center;
 }
 

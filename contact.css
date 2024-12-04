@@ -65,11 +65,3 @@ body {
 }
 
 
-@keyframes gentleBounce {
-  0%, 100% {
-    transform: translateY(0); /* Start and end at the original position */
-  }
-  50% {
-    transform: translateY(-15px); /* Move up gently */
-  }
-}

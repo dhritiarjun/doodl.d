@@ -159,7 +159,7 @@ strong{
 @media (max-width: 768px) {
 
     .left-column h1{
-        color:#fb14b8;
+        color:#ffffff;
         background-color: rgb(29, 6, 200); /* Highlight background color */
         padding: 0.5rem 1rem; /* Add space around the text */
         display: inline-block;
