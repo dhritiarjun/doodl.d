@@ -1,51 +1,324 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>doodl.d</title>
-    <link rel="stylesheet" href="styles-index.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Questrial&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dhriti</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      background-color: #000f5c;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      overflow: hidden;
+    }
+
+    model-viewer {
+      width: 100vw;
+      height: 85vw;
+      background-color: transparent;
+      --poster-color: transparent;
+      display: block;
+      transform: scale(1.9);
+      transform-origin: center center;
+    }
+
+    .home-logo {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      display: block;
+      line-height: 0;
+      z-index: 10;
+    }
+
+    .home-logo img {
+      height: 90px;
+      width: auto;
+      display: block;
+    }
+
+    nav {
+      position: fixed;
+      bottom: 40px;
+      display: flex;
+      gap: 32px;
+    }
+
+    nav a {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 15px;
+      color: #cc44cc;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      letter-spacing: 0.01em;
+    }
+
+    nav a:hover {
+      color: #e066e0;
+    }
+
+    /* Retro "System message" dialog */
+    .retro-window {
+      position: fixed;
+      width: 380px;
+      max-width: 90vw;
+      background: #c0c0c0;
+      border: 2px solid #000;
+      box-shadow: 5px 5px 14px rgba(0, 0, 0, 0.5);
+      font-family: Arial, Helvetica, sans-serif;
+      display: none;
+      z-index: 1000;
+    }
+
+    .retro-titlebar {
+      background: #0000aa;
+      color: #fff;
+      font-weight: bold;
+      font-size: 15px;
+      padding: 5px 6px 5px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: move;
+      user-select: none;
+    }
+
+    .retro-close {
+      width: 20px;
+      height: 20px;
+      line-height: 1;
+      background: #c0c0c0;
+      border: 2px outset #d4d0c8;
+      color: #000;
+      font-weight: bold;
+      font-size: 13px;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .retro-close:active {
+      border-style: inset;
+    }
+
+    .retro-body {
+      padding: 34px 24px;
+      min-height: 90px;
+      color: #000;
+      font-size: 14px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .retro-body a {
+      color: #0000ee;
+      text-decoration: underline;
+    }
+
+    .retro-body div + div {
+      margin-top: 6px;
+    }
+
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="projects.html">Projects</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-    </nav>
-    
-    <div class="gif-container">
-        <img src="./assets/doodld.gif" alt="doodl.d's gif" />
-    
-        <div class="popup">
-            <p>
-                Hi, I’m dhriti arjun, part musician and artist, part data scientist. <br>
 
-                I like to use data and technology to explore what it means to be human in the age of AI . <br><br>
+  <a href="index.html" class="home-logo" aria-label="dhriti arjun home">
+    <img src="doodld.gif" alt="doodl.d">
+  </a>
 
-                Learn more about me <a href="./about.html" 
-                target="_blank" 
-                rel="noopener noreferrer">
-                here
-             </a> 
+  <model-viewer
+    id="mv"
+    src="testjun26.glb"
+    alt="Arjun, rendered in molten chrome"
+    disable-zoom
+    shadow-intensity="0"
+    exposure="1.2"
+    environment-image="neutral"
+    camera-orbit="0deg 85deg auto"
+    field-of-view="22deg"
+    interaction-prompt="none">
+  </model-viewer>
 
-            </p>
-        </div>
+  <nav>
+    <a href="#" id="nav-about">About</a>
+    <a href="mailto:dhriti.arjun@gmail.com" id="nav-contact">Contact</a>
+  </nav>
+
+  <div class="retro-window" id="about-window">
+    <div class="retro-titlebar">
+      <span>dhriti says</span>
+      <button class="retro-close" type="button" data-close="about-window" aria-label="Close">✕</button>
     </div>
-    
+    <div class="retro-body">
+      hi, i&rsquo;m dhriti arjun, part musician and artist, part data scientist. i like to use data and technology to explore what it means to be human in the age of ai. learn more about me <a href="about.html">here</a>.
+    </div>
+  </div>
 
-    
+  <div class="retro-window" id="contact-window">
+    <div class="retro-titlebar">
+      <span>dhriti says</span>
+      <button class="retro-close" type="button" data-close="contact-window" aria-label="Close">✕</button>
+    </div>
+    <div class="retro-body">
+      <div><a href="mailto:dhriti.arjun@gmail.com">dhriti.arjun@gmail.com</a></div>
+      <div><a href="https://www.linkedin.com/dhritiarjun" target="_blank" rel="noopener">linkedin</a></div>
+      <div><a href="https://www.instagram.com/dhritiarjun/" target="_blank" rel="noopener">@dhritiarjun</a></div>
+    </div>
+  </div>
 
-    
+  <script>
+    const mv = document.getElementById('mv');
 
-    <p class = "copyright">&#169 All illustrations belong to dhriti arjun (doodl.d)</p>
+    // Base orbit — horizontal angle, vertical angle
+    const BASE_THETA = 0;   // deg, left/right starting point
+    const BASE_PHI   = 85;  // deg, vertical starting point (90 = dead-on, lower = more from above)
 
-    
+    // How far the camera can swing from base in each axis
+    const THETA_RANGE = 18; // deg left/right
+    const PHI_RANGE   = 10; // deg up/down
+
+    const LERP = 0.06; // laziness — lower = heavier lag
+
+    let targetTheta = BASE_THETA;
+    let targetPhi   = BASE_PHI;
+    let currentTheta = BASE_THETA;
+    let currentPhi   = BASE_PHI;
+
+    window.addEventListener('mousemove', function (e) {
+      const x = (e.clientX / window.innerWidth  - 0.5) * 2; // -1 to 1
+      const y = (e.clientY / window.innerHeight - 0.5) * 2; // -1 to 1
+
+      targetTheta = BASE_THETA + x * THETA_RANGE;
+      targetPhi   = BASE_PHI   + y * PHI_RANGE;
+    });
+
+    function tick() {
+      currentTheta += (targetTheta - currentTheta) * LERP;
+      currentPhi   += (targetPhi   - currentPhi)   * LERP;
+
+      mv.cameraOrbit =
+        currentTheta.toFixed(3) + 'deg ' +
+        currentPhi.toFixed(3)   + 'deg auto';
+
+      requestAnimationFrame(tick);
+    }
+
+    // Wait for model-viewer to be ready before starting
+    mv.addEventListener('load', tick, { once: true });
+
+    // Retro "System message" windows: open/close, drag, and stacking
+    (function () {
+      let topZ = 1000;
+
+      function bringToFront(win) {
+        topZ += 1;
+        win.style.zIndex = String(topZ);
+      }
+
+      function openWindow(id) {
+        const win = document.getElementById(id);
+        if (!win) return;
+        win.style.display = 'block';
+        const w = win.offsetWidth;
+        const h = win.offsetHeight;
+        win.style.left = Math.max(0, (window.innerWidth - w) / 2) + 'px';
+        win.style.top = Math.max(0, (window.innerHeight - h) / 2 - 20) + 'px';
+        bringToFront(win);
+      }
+
+      function closeWindow(id) {
+        const win = document.getElementById(id);
+        if (win) win.style.display = 'none';
+      }
+
+      function makeDraggable(win) {
+        const handle = win.querySelector('.retro-titlebar');
+        let dragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        handle.addEventListener('mousedown', function (e) {
+          if (e.target.closest('.retro-close')) return;
+          dragging = true;
+          bringToFront(win);
+          const rect = win.getBoundingClientRect();
+          offsetX = e.clientX - rect.left;
+          offsetY = e.clientY - rect.top;
+          e.preventDefault();
+        });
+
+        window.addEventListener('mousemove', function (e) {
+          if (!dragging) return;
+          win.style.left = (e.clientX - offsetX) + 'px';
+          win.style.top = (e.clientY - offsetY) + 'px';
+        });
+
+        window.addEventListener('mouseup', function () {
+          dragging = false;
+        });
+
+        win.addEventListener('mousedown', function () {
+          bringToFront(win);
+        });
+      }
+
+      document.querySelectorAll('.retro-window').forEach(makeDraggable);
+
+      document.querySelectorAll('[data-close]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          closeWindow(btn.getAttribute('data-close'));
+        });
+      });
+
+      const aboutLink = document.getElementById('nav-about');
+      if (aboutLink) {
+        aboutLink.addEventListener('click', function (e) {
+          e.preventDefault();
+          openWindow('about-window');
+        });
+      }
+
+      const contactLink = document.getElementById('nav-contact');
+      if (contactLink) {
+        contactLink.addEventListener('click', function (e) {
+          e.preventDefault();
+          openWindow('contact-window');
+        });
+      }
+
+      // Backlink support: arriving from another page via #about or #contact
+      // opens the matching window automatically.
+      if (window.location.hash === '#about') {
+        openWindow('about-window');
+      } else if (window.location.hash === '#contact') {
+        openWindow('contact-window');
+      }
+    })();
+  </script>
+
 </body>
 </html>
