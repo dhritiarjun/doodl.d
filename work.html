@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>work — dhriti</title>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+    }
+
+    body {
+      background-color: #ff1f96;
+      color: #000;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 24px 0;
+    }
+
+    .home-logo {
+      display: block;
+      line-height: 0;
+    }
+
+    .home-logo img {
+      height: 90px;
+      width: auto;
+      display: block;
+    }
+
+    .site-nav nav {
+      display: flex;
+      gap: 32px;
+    }
+
+    .site-nav nav a {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 15px;
+      color: #fff;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      letter-spacing: 0.01em;
+    }
+
+    .site-nav nav a.active {
+      color: #ffde2d;
+    }
+
+    .site-nav nav a:hover {
+      color: #ffde2d;
+    }
+
+    main {
+      margin-top: 24px;
+    }
+
+    .content {
+      padding: 40px 60px 100px;
+    }
+
+    .work-heading {
+      font-size: 74px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 32px;
+    }
+
+    .work-layout {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    .accordion {
+      flex: 1;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .side-panel {
+      flex-shrink: 0;
+      width: 480px;
+      background: #fff;
+      border: 2px solid #000;
+      border-radius: 16px;
+      padding: 24px 28px;
+      font-size: 15px;
+      line-height: 1.65;
+      color: #000;
+    }
+
+    .side-section + .side-section {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #ddd;
+    }
+
+    .side-section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1400c8;
+      margin-bottom: 14px;
+    }
+
+    .side-skill-group {
+      margin-bottom: 12px;
+    }
+
+    .side-skill-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .side-skill-label {
+      font-weight: 700;
+      color: #1400c8;
+      margin-bottom: 2px;
+    }
+
+    .accordion-item {
+      background: #fff;
+      border: 2px solid #000;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .accordion-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 28px;
+      background: #fff;
+      border: none;
+      font-family: inherit;
+      font-size: 22px;
+      font-weight: 600;
+      text-align: left;
+      color: #1400c8;
+      cursor: pointer;
+    }
+
+    .accordion-item.open .accordion-header {
+      background: #1400c8;
+      color: #fff;
+    }
+
+    .accordion-arrow {
+      display: inline-block;
+      flex-shrink: 0;
+      font-size: 14px;
+      transition: transform 0.2s ease;
+    }
+
+    .accordion-item.open .accordion-arrow {
+      transform: rotate(180deg);
+    }
+
+    .accordion-body {
+      display: none;
+      padding: 24px 28px;
+      font-size: 16px;
+      line-height: 1.65;
+      color: #000;
+    }
+
+    .accordion-item.open .accordion-body {
+      display: block;
+    }
+
+    .accordion-body .entry + .entry {
+      margin-top: 22px;
+      padding-top: 22px;
+      border-top: 1px solid #ddd;
+    }
+
+    .accordion-body .entry-title {
+      color: #1400c8;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .accordion-body a {
+      color: #1400c8;
+      text-decoration: underline;
+    }
+
+    .retro-window {
+      position: fixed;
+      width: 380px;
+      max-width: 90vw;
+      background: #c0c0c0;
+      border: 2px solid #000;
+      box-shadow: 5px 5px 14px rgba(0,0,0,0.5);
+      font-family: Arial, Helvetica, sans-serif;
+      display: none;
+      z-index: 1000;
+    }
+
+    .retro-titlebar {
+      background: #0000aa;
+      color: #fff;
+      font-weight: bold;
+      font-size: 15px;
+      padding: 5px 6px 5px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: move;
+      user-select: none;
+    }
+
+    .retro-close {
+      width: 20px;
+      height: 20px;
+      background: #c0c0c0;
+      border: 2px outset #d4d0c8;
+      color: #000;
+      font-weight: bold;
+      font-size: 13px;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .retro-close:active { border-style: inset; }
+
+    .retro-body {
+      padding: 34px 24px;
+      min-height: 90px;
+      color: #000;
+      font-size: 14px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .retro-body a { color: #0000ee; text-decoration: underline; }
+    .retro-body div + div { margin-top: 6px; }
+  </style>
+</head>
+<body>
+
+  <div class="site-nav">
+    <a href="index.html" class="home-logo" aria-label="dhriti arjun home">
+      <img src="doodld.gif" alt="doodl.d">
+    </a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="#" id="nav-contact">Contact</a>
+    </nav>
+  </div>
+
+  <main>
+    <div class="content">
+      <div class="work-heading">work</div>
+      <div class="work-layout">
+        <div class="accordion" id="work-accordion"></div>
+        <div class="side-panel">
+          <div class="side-section">
+            <div class="side-section-title">key skills</div>
+            <div class="side-skill-group">
+              <div class="side-skill-label">data science &amp; ai</div>
+              <div>prompt engineering &bull; machine learning &bull; python &bull; sql &bull; matlab &bull; jupyter notebook &bull; dask &bull; pandas &bull; labview &bull; codesys &bull; statistics &bull; javascript &bull; react</div>
+            </div>
+            <div class="side-skill-group">
+              <div class="side-skill-label">design</div>
+              <div>graphic design &bull; editing &bull; illustration &bull; figma &bull; procreate &bull; inkscape &bull; canva &bull; social media posts &bull; midjourney &bull; html &bull; css &bull; blender</div>
+            </div>
+            <div class="side-skill-group">
+              <div class="side-skill-label">content &amp; communication</div>
+              <div>content creation &bull; communication &bull; writing &bull; editing &bull; visualisation &bull; sales copy &bull; workshops &bull; community building &bull; event design and delivery &bull; webflow</div>
+            </div>
+          </div>
+          <div class="side-section">
+            <div class="side-section-title">languages</div>
+            <div>english (native) &bull; hindi (proficient) &bull; dutch (limited proficiency)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="retro-window" id="contact-window">
+    <div class="retro-titlebar">
+      <span>dhriti says</span>
+      <button class="retro-close" type="button" data-close="contact-window" aria-label="Close">✕</button>
+    </div>
+    <div class="retro-body">
+      <div><a href="mailto:dhriti.arjun@gmail.com">dhriti.arjun@gmail.com</a></div>
+      <div><a href="https://www.linkedin.com/in/dhritiarjun" target="_blank" rel="noopener">linkedin</a></div>
+      <div><a href="https://www.instagram.com/dhritiarjun/" target="_blank" rel="noopener">@dhritiarjun</a></div>
+    </div>
+  </div>
+
+  <script>
+    const WORK_ITEMS = [
+      {
+        title: 'work experience',
+        entries: [
+          {
+            title: 'front end developer: salesken inc. (november 2024&ndash;) (nda)',
+            body: 'building (end-to-end) a company tool to be integrated into employee workflow to enhance productivity and gain insights on how to optimise team output using javascript, nodejs, html and css.<br><br>redesigning company website using webflow and working with the marketing team to design company assets.'
+          },
+          {
+            title: 'research intern: fractal analytics limited (4 months; aug&ndash;dec 2023)',
+            body: 'used neuroscience principles and generative ai to understand decision-making in advertising to help create an advertising framework for brands such as l&rsquo;or&eacute;al paris and knorr.<br><br>worked on the development of a system which applies the brand marketing and legal guidelines to an ai generated image to explore the commercial potential of generative ai in the industry.'
+          },
+          {
+            title: 'design intern: yikes technology / klapklap (march 2020&ndash;dec 2020)',
+            body: 'created background art and avatars for the android app.<br><br>created social media and marketing content such as posters, reels, illustrations etc to promote company events.'
+          }
+        ]
+      },
+      {
+        title: 'education',
+        entries: [
+          {
+            title: 'bsc machine learning, psychology &amp; ethics (2021&ndash;2024)',
+            body: 'university of groningen | dutch gpa: 8.3 | gpa: 3.8/4<br><br><strong>thesis (grade: 9/10)</strong><br>assessed and evaluated existing machine learning methods such as sentiment analysis and image-based forecasting in fashion trend predictions, generating a novel ml model for better trend prediction in fashion retailing.<br><br>approaches used: fashion trend forecasting systems using techniques like r-cnns, logistic regression, multivariate attention fusion. nlp for social media sentiment analysis. image classification and analysis using unsupervised object detection and fashion image segmentation and labelling.'
+          },
+          {
+            title: 'cambridge a levels (2013&ndash;2021)',
+            body: 'legacy school bangalore | grade average: a<br><br>sat score: 1530 &mdash; maths: 98th percentile | english: 99th percentile<br><br>75% scholarship'
+          }
+        ]
+      },
+      {
+        title: 'courses',
+        entries: [
+          {
+            title: 'ai &amp; machine learning (major)',
+            body: 'advanced python programming &bull; machine learning &bull; big data &bull; calculus 1 &amp; 2 &bull; linear algebra &bull; smart tech (lab) &bull; artificial intelligence &bull; robotics &bull; computation methods'
+          },
+          {
+            title: 'psychology &amp; ethics (minor)',
+            body: 'cognitive psychology &bull; biopsychology &bull; philosophy of mind &bull; human error &bull; philosophy of science'
+          },
+          {
+            title: 'other skills',
+            body: 'leadership &bull; padi certified open water scuba diver'
+          }
+        ]
+      },
+      {
+        title: 'achievements & leadership',
+        entries: [
+          {
+            title: 'music',
+            body: 'led a team of 10+ students in collaboration with the un office on drugs and crime to combat misinformation and cybercrime in the pandemic &mdash; did the website cover art design and promotional content.<br><br>did a series of 7 promotional solo concerts, reaching 5000+ views. formally trained for over 8 years in western vocals and piano. 45+ solo live music concerts with 10000+ views on instagram.'
+          },
+          {
+            title: 'art: chiaroscuro art festival, india (2019&ndash;2021)',
+            body: 'visual arts team leader for a country-wide arts festival attended by over 25 premier schools in the country with over 100 contributing artists. managed a team of 10+ members, and designed all visuals, theme and social media content, and managed logistics of the event.'
+          },
+          {
+            title: 'founder: postcolonial perspectives book club (september 2023 &ndash; july 2024)',
+            body: 'founded a university book club focused on decolonising our reading habits in collaboration with the literature professor at our university. organised over 30 events discussing seminal work in postcolonial literature and theoretical work, moderating the discussions and presenting the key themes of the books weekly.'
+          },
+          {
+            title: 'board member: groningen feminist network (february 2023 &ndash; may 2024)',
+            body: 'organised weekly educational, social and collaborative events surrounding the feminist space in groningen. managed the events end to end with a team of four where i designed the social media content, organised the space, and moderated discussions. planned events and parades hosting 300+ attendees.'
+          }
+        ]
+      },
+    ];
+
+    const accordion = document.getElementById('work-accordion');
+
+    WORK_ITEMS.forEach(function (item) {
+      const row = document.createElement('div');
+      row.className = 'accordion-item';
+
+      const header = document.createElement('button');
+      header.className = 'accordion-header';
+      header.type = 'button';
+      header.innerHTML =
+        '<span>' + item.title + '</span>' +
+        '<span class="accordion-arrow">&#9660;</span>';
+
+      const body = document.createElement('div');
+      body.className = 'accordion-body';
+      body.innerHTML = item.entries.map(function (entry) {
+        const titleHtml = entry.title ? '<div class="entry-title">' + entry.title + '</div>' : '';
+        return '<div class="entry">' + titleHtml + '<div>' + entry.body + '</div></div>';
+      }).join('');
+
+      header.addEventListener('click', function () {
+        row.classList.toggle('open');
+      });
+
+      row.appendChild(header);
+      row.appendChild(body);
+      accordion.appendChild(row);
+    });
+
+    (function () {
+      let topZ = 1000;
+      function bringToFront(win) { topZ++; win.style.zIndex = String(topZ); }
+      function openWindow(id) {
+        const win = document.getElementById(id);
+        if (!win) return;
+        win.style.display = 'block';
+        win.style.left = Math.max(0, (window.innerWidth - win.offsetWidth) / 2) + 'px';
+        win.style.top = Math.max(0, (window.innerHeight - win.offsetHeight) / 2 - 20) + 'px';
+        bringToFront(win);
+      }
+      function closeWindow(id) { const win = document.getElementById(id); if (win) win.style.display = 'none'; }
+      function makeDraggable(win) {
+        const handle = win.querySelector('.retro-titlebar');
+        let dragging = false, offsetX = 0, offsetY = 0;
+        handle.addEventListener('mousedown', function (e) {
+          if (e.target.closest('.retro-close')) return;
+          dragging = true; bringToFront(win);
+          const r = win.getBoundingClientRect(); offsetX = e.clientX - r.left; offsetY = e.clientY - r.top;
+          e.preventDefault();
+        });
+        window.addEventListener('mousemove', function (e) { if (!dragging) return; win.style.left = (e.clientX - offsetX) + 'px'; win.style.top = (e.clientY - offsetY) + 'px'; });
+        window.addEventListener('mouseup', function () { dragging = false; });
+        win.addEventListener('mousedown', function () { bringToFront(win); });
+      }
+      document.querySelectorAll('.retro-window').forEach(makeDraggable);
+      document.querySelectorAll('[data-close]').forEach(function (btn) { btn.addEventListener('click', function () { closeWindow(btn.getAttribute('data-close')); }); });
+      const contactLink = document.getElementById('nav-contact');
+      if (contactLink) { contactLink.addEventListener('click', function (e) { e.preventDefault(); openWindow('contact-window'); }); }
+    })();
+  </script>
+
+</body>
+</html>
