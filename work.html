@@ -41,24 +41,50 @@
 
     .site-nav nav {
       display: flex;
-      gap: 32px;
+      gap: 36px;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 12px 28px;
+      border-radius: 999px;
     }
 
     .site-nav nav a {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 15px;
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+      height: 1.1em;
+      line-height: 1.1;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 600;
       color: #fff;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      letter-spacing: 0.01em;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
     }
 
-    .site-nav nav a.active {
+    .site-nav nav a .roll {
+      display: block;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .site-nav nav a .roll span {
+      display: block;
+      height: 1.1em;
+      line-height: 1.1;
+    }
+
+    .site-nav nav a .roll span:last-child {
       color: #ffde2d;
     }
 
-    .site-nav nav a:hover {
+    .site-nav nav a.active .roll span:first-child {
       color: #ffde2d;
+    }
+
+    .site-nav nav a:hover .roll {
+      transform: translateY(-1.1em);
     }
 
     main {
@@ -247,11 +273,23 @@
       color: #000;
       font-size: 14px;
       line-height: 1.7;
-      text-align: center;
+      text-align: left;
     }
 
     .retro-body a { color: #0000ee; text-decoration: underline; }
     .retro-body div + div { margin-top: 6px; }
+
+    .type-cursor {
+      display: inline-block;
+      margin-left: 1px;
+      color: #000;
+      animation: type-cursor-blink 0.9s steps(1) infinite;
+    }
+
+    @keyframes type-cursor-blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
   </style>
 </head>
 <body>
@@ -261,9 +299,10 @@
       <img src="doodld.gif" alt="doodl.d">
     </a>
     <nav>
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="#" id="nav-contact">Contact</a>
+      <a href="index.html"><span class="roll"><span>Home</span><span aria-hidden="true">Home</span></span></a>
+      <a href="about.html"><span class="roll"><span>About</span><span aria-hidden="true">About</span></span></a>
+      <a href="work.html" class="active"><span class="roll"><span>Work</span><span aria-hidden="true">Work</span></span></a>
+      <a href="#" id="nav-contact"><span class="roll"><span>Contact</span><span aria-hidden="true">Contact</span></span></a>
     </nav>
   </div>
 
@@ -272,27 +311,6 @@
       <div class="work-heading">work</div>
       <div class="work-layout">
         <div class="accordion" id="work-accordion"></div>
-        <div class="side-panel">
-          <div class="side-section">
-            <div class="side-section-title">key skills</div>
-            <div class="side-skill-group">
-              <div class="side-skill-label">data science &amp; ai</div>
-              <div>prompt engineering &bull; machine learning &bull; python &bull; sql &bull; matlab &bull; jupyter notebook &bull; dask &bull; pandas &bull; labview &bull; codesys &bull; statistics &bull; javascript &bull; react</div>
-            </div>
-            <div class="side-skill-group">
-              <div class="side-skill-label">design</div>
-              <div>graphic design &bull; editing &bull; illustration &bull; figma &bull; procreate &bull; inkscape &bull; canva &bull; social media posts &bull; midjourney &bull; html &bull; css &bull; blender</div>
-            </div>
-            <div class="side-skill-group">
-              <div class="side-skill-label">content &amp; communication</div>
-              <div>content creation &bull; communication &bull; writing &bull; editing &bull; visualisation &bull; sales copy &bull; workshops &bull; community building &bull; event design and delivery &bull; webflow</div>
-            </div>
-          </div>
-          <div class="side-section">
-            <div class="side-section-title">languages</div>
-            <div>english (native) &bull; hindi (proficient) &bull; dutch (limited proficiency)</div>
-          </div>
-        </div>
       </div>
     </div>
   </main>
@@ -303,6 +321,7 @@
       <button class="retro-close" type="button" data-close="contact-window" aria-label="Close">✕</button>
     </div>
     <div class="retro-body">
+      <div id="contact-intro"><span data-part="pre"></span><a href="about.html" data-part="link"></a><span data-part="post"></span><span class="type-cursor">&#9614;</span></div>
       <div><a href="mailto:dhriti.arjun@gmail.com">dhriti.arjun@gmail.com</a></div>
       <div><a href="https://www.linkedin.com/in/dhritiarjun" target="_blank" rel="noopener">linkedin</a></div>
       <div><a href="https://www.instagram.com/dhritiarjun/" target="_blank" rel="noopener">@dhritiarjun</a></div>
@@ -310,76 +329,8 @@
   </div>
 
   <script>
-    const WORK_ITEMS = [
-      {
-        title: 'work experience',
-        entries: [
-          {
-            title: 'front end developer: salesken inc. (november 2024&ndash;) (nda)',
-            body: 'building (end-to-end) a company tool to be integrated into employee workflow to enhance productivity and gain insights on how to optimise team output using javascript, nodejs, html and css.<br><br>redesigning company website using webflow and working with the marketing team to design company assets.'
-          },
-          {
-            title: 'research intern: fractal analytics limited (4 months; aug&ndash;dec 2023)',
-            body: 'used neuroscience principles and generative ai to understand decision-making in advertising to help create an advertising framework for brands such as l&rsquo;or&eacute;al paris and knorr.<br><br>worked on the development of a system which applies the brand marketing and legal guidelines to an ai generated image to explore the commercial potential of generative ai in the industry.'
-          },
-          {
-            title: 'design intern: yikes technology / klapklap (march 2020&ndash;dec 2020)',
-            body: 'created background art and avatars for the android app.<br><br>created social media and marketing content such as posters, reels, illustrations etc to promote company events.'
-          }
-        ]
-      },
-      {
-        title: 'education',
-        entries: [
-          {
-            title: 'bsc machine learning, psychology &amp; ethics (2021&ndash;2024)',
-            body: 'university of groningen | dutch gpa: 8.3 | gpa: 3.8/4<br><br><strong>thesis (grade: 9/10)</strong><br>assessed and evaluated existing machine learning methods such as sentiment analysis and image-based forecasting in fashion trend predictions, generating a novel ml model for better trend prediction in fashion retailing.<br><br>approaches used: fashion trend forecasting systems using techniques like r-cnns, logistic regression, multivariate attention fusion. nlp for social media sentiment analysis. image classification and analysis using unsupervised object detection and fashion image segmentation and labelling.'
-          },
-          {
-            title: 'cambridge a levels (2013&ndash;2021)',
-            body: 'legacy school bangalore | grade average: a<br><br>sat score: 1530 &mdash; maths: 98th percentile | english: 99th percentile<br><br>75% scholarship'
-          }
-        ]
-      },
-      {
-        title: 'courses',
-        entries: [
-          {
-            title: 'ai &amp; machine learning (major)',
-            body: 'advanced python programming &bull; machine learning &bull; big data &bull; calculus 1 &amp; 2 &bull; linear algebra &bull; smart tech (lab) &bull; artificial intelligence &bull; robotics &bull; computation methods'
-          },
-          {
-            title: 'psychology &amp; ethics (minor)',
-            body: 'cognitive psychology &bull; biopsychology &bull; philosophy of mind &bull; human error &bull; philosophy of science'
-          },
-          {
-            title: 'other skills',
-            body: 'leadership &bull; padi certified open water scuba diver'
-          }
-        ]
-      },
-      {
-        title: 'achievements & leadership',
-        entries: [
-          {
-            title: 'music',
-            body: 'led a team of 10+ students in collaboration with the un office on drugs and crime to combat misinformation and cybercrime in the pandemic &mdash; did the website cover art design and promotional content.<br><br>did a series of 7 promotional solo concerts, reaching 5000+ views. formally trained for over 8 years in western vocals and piano. 45+ solo live music concerts with 10000+ views on instagram.'
-          },
-          {
-            title: 'art: chiaroscuro art festival, india (2019&ndash;2021)',
-            body: 'visual arts team leader for a country-wide arts festival attended by over 25 premier schools in the country with over 100 contributing artists. managed a team of 10+ members, and designed all visuals, theme and social media content, and managed logistics of the event.'
-          },
-          {
-            title: 'founder: postcolonial perspectives book club (september 2023 &ndash; july 2024)',
-            body: 'founded a university book club focused on decolonising our reading habits in collaboration with the literature professor at our university. organised over 30 events discussing seminal work in postcolonial literature and theoretical work, moderating the discussions and presenting the key themes of the books weekly.'
-          },
-          {
-            title: 'board member: groningen feminist network (february 2023 &ndash; may 2024)',
-            body: 'organised weekly educational, social and collaborative events surrounding the feminist space in groningen. managed the events end to end with a team of four where i designed the social media content, organised the space, and moderated discussions. planned events and parades hosting 300+ attendees.'
-          }
-        ]
-      },
-    ];
+    // Left empty for now — populate with work entries later, same shape as lore.html's items.
+    const WORK_ITEMS = [];
 
     const accordion = document.getElementById('work-accordion');
 
@@ -420,7 +371,51 @@
         win.style.left = Math.max(0, (window.innerWidth - win.offsetWidth) / 2) + 'px';
         win.style.top = Math.max(0, (window.innerHeight - win.offsetHeight) / 2 - 20) + 'px';
         bringToFront(win);
+        if (id === 'contact-window') startContactTypewriter();
       }
+
+      // Retro video-game style typewriter effect for the contact intro line
+      // (ported from reactbits.dev's TextType component)
+      let typewriterRun = 0;
+      function startContactTypewriter() {
+        const container = document.getElementById('contact-intro');
+        if (!container) return;
+
+        const MIN_SPEED = 10;
+        const MAX_SPEED = 40;
+
+        const pre = container.querySelector('[data-part="pre"]');
+        const link = container.querySelector('[data-part="link"]');
+        const post = container.querySelector('[data-part="post"]');
+
+        const PRE_TEXT = 'hi, i’m dhriti arjun, part musician and artist, part data scientist. i like to use data and technology to explore what it means to be human in the age of ai. learn more about me ';
+        const LINK_TEXT = 'here';
+        const POST_TEXT = '.';
+
+        pre.textContent = '';
+        link.textContent = '';
+        post.textContent = '';
+
+        const queue = [];
+        for (const ch of PRE_TEXT) queue.push([pre, ch]);
+        for (const ch of LINK_TEXT) queue.push([link, ch]);
+        for (const ch of POST_TEXT) queue.push([post, ch]);
+
+        const runId = ++typewriterRun;
+        let i = 0;
+
+        function step() {
+          if (runId !== typewriterRun) return;
+          if (i >= queue.length) return;
+          const [el, ch] = queue[i++];
+          el.textContent += ch;
+          const delay = MIN_SPEED + Math.random() * (MAX_SPEED - MIN_SPEED);
+          setTimeout(step, delay);
+        }
+
+        step();
+      }
+
       function closeWindow(id) { const win = document.getElementById(id); if (win) win.style.display = 'none'; }
       function makeDraggable(win) {
         const handle = win.querySelector('.retro-titlebar');

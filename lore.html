@@ -41,24 +41,50 @@
 
     .site-nav nav {
       display: flex;
-      gap: 32px;
+      gap: 36px;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 12px 28px;
+      border-radius: 999px;
     }
 
     .site-nav nav a {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 15px;
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+      height: 1.1em;
+      line-height: 1.1;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 600;
       color: #fff;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      letter-spacing: 0.01em;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
     }
 
-    .site-nav nav a.active {
+    .site-nav nav a .roll {
+      display: block;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .site-nav nav a .roll span {
+      display: block;
+      height: 1.1em;
+      line-height: 1.1;
+    }
+
+    .site-nav nav a .roll span:last-child {
       color: #ffde2d;
     }
 
-    .site-nav nav a:hover {
+    .site-nav nav a.active .roll span:first-child {
       color: #ffde2d;
+    }
+
+    .site-nav nav a:hover .roll {
+      transform: translateY(-1.1em);
     }
 
     main {
@@ -201,11 +227,23 @@
       color: #000;
       font-size: 14px;
       line-height: 1.7;
-      text-align: center;
+      text-align: left;
     }
 
     .retro-body a { color: #0000ee; text-decoration: underline; }
     .retro-body div + div { margin-top: 6px; }
+
+    .type-cursor {
+      display: inline-block;
+      margin-left: 1px;
+      color: #000;
+      animation: type-cursor-blink 0.9s steps(1) infinite;
+    }
+
+    @keyframes type-cursor-blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
   </style>
 </head>
 <body>
@@ -215,9 +253,10 @@
       <img src="doodld.gif" alt="doodl.d">
     </a>
     <nav>
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="#" id="nav-contact">Contact</a>
+      <a href="index.html"><span class="roll"><span>Home</span><span aria-hidden="true">Home</span></span></a>
+      <a href="about.html"><span class="roll"><span>About</span><span aria-hidden="true">About</span></span></a>
+      <a href="work.html"><span class="roll"><span>Work</span><span aria-hidden="true">Work</span></span></a>
+      <a href="#" id="nav-contact"><span class="roll"><span>Contact</span><span aria-hidden="true">Contact</span></span></a>
     </nav>
   </div>
 
@@ -234,6 +273,7 @@
       <button class="retro-close" type="button" data-close="contact-window" aria-label="Close">✕</button>
     </div>
     <div class="retro-body">
+      <div id="contact-intro"><span data-part="pre"></span><a href="about.html" data-part="link"></a><span data-part="post"></span><span class="type-cursor">&#9614;</span></div>
       <div><a href="mailto:dhriti.arjun@gmail.com">dhriti.arjun@gmail.com</a></div>
       <div><a href="https://www.linkedin.com/in/dhritiarjun" target="_blank" rel="noopener">linkedin</a></div>
       <div><a href="https://www.instagram.com/dhritiarjun/" target="_blank" rel="noopener">@dhritiarjun</a></div>
@@ -330,7 +370,51 @@
         win.style.left = Math.max(0, (window.innerWidth - win.offsetWidth) / 2) + 'px';
         win.style.top = Math.max(0, (window.innerHeight - win.offsetHeight) / 2 - 20) + 'px';
         bringToFront(win);
+        if (id === 'contact-window') startContactTypewriter();
       }
+
+      // Retro video-game style typewriter effect for the contact intro line
+      // (ported from reactbits.dev's TextType component)
+      let typewriterRun = 0;
+      function startContactTypewriter() {
+        const container = document.getElementById('contact-intro');
+        if (!container) return;
+
+        const MIN_SPEED = 10;
+        const MAX_SPEED = 40;
+
+        const pre = container.querySelector('[data-part="pre"]');
+        const link = container.querySelector('[data-part="link"]');
+        const post = container.querySelector('[data-part="post"]');
+
+        const PRE_TEXT = 'hi, i’m dhriti arjun, part musician and artist, part data scientist. i like to use data and technology to explore what it means to be human in the age of ai. learn more about me ';
+        const LINK_TEXT = 'here';
+        const POST_TEXT = '.';
+
+        pre.textContent = '';
+        link.textContent = '';
+        post.textContent = '';
+
+        const queue = [];
+        for (const ch of PRE_TEXT) queue.push([pre, ch]);
+        for (const ch of LINK_TEXT) queue.push([link, ch]);
+        for (const ch of POST_TEXT) queue.push([post, ch]);
+
+        const runId = ++typewriterRun;
+        let i = 0;
+
+        function step() {
+          if (runId !== typewriterRun) return;
+          if (i >= queue.length) return;
+          const [el, ch] = queue[i++];
+          el.textContent += ch;
+          const delay = MIN_SPEED + Math.random() * (MAX_SPEED - MIN_SPEED);
+          setTimeout(step, delay);
+        }
+
+        step();
+      }
+
       function closeWindow(id) { const win = document.getElementById(id); if (win) win.style.display = 'none'; }
       function makeDraggable(win) {
         const handle = win.querySelector('.retro-titlebar');
