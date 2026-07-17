@@ -19,10 +19,6 @@
 
     body {
       background-color: #000f5c;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
-      background-size: 60px 60px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -30,6 +26,15 @@
       min-height: 100vh;
       font-family: Arial, Helvetica, sans-serif;
       overflow: hidden;
+    }
+
+    #dither-bg {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      z-index: -1;
     }
 
     model-viewer {
@@ -42,39 +47,54 @@
       transform-origin: center center;
     }
 
-    .home-logo {
-      position: fixed;
-      top: 24px;
-      left: 24px;
-      display: block;
-      line-height: 0;
-      z-index: 10;
-    }
-
-    .home-logo img {
-      height: 90px;
-      width: auto;
-      display: block;
-    }
-
     nav {
       position: fixed;
-      bottom: 40px;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
-      gap: 32px;
+      gap: 36px;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.18);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      padding: 12px 28px;
+      border-radius: 999px;
+      box-shadow: 0 0 40px 10px rgba(0, 0, 0, 0.12);
     }
 
     nav a {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 15px;
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+      height: 1.1em;
+      line-height: 1.1;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      font-weight: 600;
       color: #cc44cc;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      letter-spacing: 0.01em;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
     }
 
-    nav a:hover {
+    nav a .roll {
+      display: block;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    nav a .roll span {
+      display: block;
+      height: 1.1em;
+      line-height: 1.1;
+    }
+
+    nav a .roll span:last-child {
       color: #e066e0;
+    }
+
+    nav a:hover .roll {
+      transform: translateY(-1.1em);
     }
 
     /* Retro "System message" dialog */
@@ -130,12 +150,24 @@
       color: #000;
       font-size: 14px;
       line-height: 1.7;
-      text-align: center;
+      text-align: left;
     }
 
     .retro-body a {
       color: #0000ee;
       text-decoration: underline;
+    }
+
+    .type-cursor {
+      display: inline-block;
+      margin-left: 1px;
+      color: #000;
+      animation: type-cursor-blink 0.9s steps(1) infinite;
+    }
+
+    @keyframes type-cursor-blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
     }
 
     .retro-body div + div {
@@ -146,9 +178,7 @@
 </head>
 <body>
 
-  <a href="index.html" class="home-logo" aria-label="dhriti arjun home">
-    <img src="doodld.gif" alt="doodl.d">
-  </a>
+  <canvas id="dither-bg"></canvas>
 
   <model-viewer
     id="mv"
@@ -164,19 +194,10 @@
   </model-viewer>
 
   <nav>
-    <a href="#" id="nav-about">About</a>
-    <a href="mailto:dhriti.arjun@gmail.com" id="nav-contact">Contact</a>
+    <a href="about.html"><span class="roll"><span>About</span><span aria-hidden="true">About</span></span></a>
+    <a href="work.html"><span class="roll"><span>Work</span><span aria-hidden="true">Work</span></span></a>
+    <a href="mailto:dhriti.arjun@gmail.com" id="nav-contact"><span class="roll"><span>Contact</span><span aria-hidden="true">Contact</span></span></a>
   </nav>
-
-  <div class="retro-window" id="about-window">
-    <div class="retro-titlebar">
-      <span>dhriti says</span>
-      <button class="retro-close" type="button" data-close="about-window" aria-label="Close">✕</button>
-    </div>
-    <div class="retro-body">
-      hi, i&rsquo;m dhriti arjun, part musician and artist, part data scientist. i like to use data and technology to explore what it means to be human in the age of ai. learn more about me <a href="about.html">here</a>.
-    </div>
-  </div>
 
   <div class="retro-window" id="contact-window">
     <div class="retro-titlebar">
@@ -184,6 +205,7 @@
       <button class="retro-close" type="button" data-close="contact-window" aria-label="Close">✕</button>
     </div>
     <div class="retro-body">
+      <div id="contact-intro"><span data-part="pre"></span><a href="about.html" data-part="link"></a><span data-part="post"></span><span class="type-cursor">&#9614;</span></div>
       <div><a href="mailto:dhriti.arjun@gmail.com">dhriti.arjun@gmail.com</a></div>
       <div><a href="https://www.linkedin.com/dhritiarjun" target="_blank" rel="noopener">linkedin</a></div>
       <div><a href="https://www.instagram.com/dhritiarjun/" target="_blank" rel="noopener">@dhritiarjun</a></div>
@@ -191,6 +213,296 @@
   </div>
 
   <script>
+    // Dithered wave background (ported from reactbits.dev's Dither component)
+    (function () {
+      const canvas = document.getElementById('dither-bg');
+      const gl = canvas.getContext('webgl2', { antialias: true, preserveDrawingBuffer: true });
+      if (!gl) return;
+
+      const WAVE_COLOR = [0, 0.22745098039215686, 1];
+      const COLOR_NUM = 4;
+      const PIXEL_SIZE = 3;
+      const WAVE_AMPLITUDE = 0.3;
+      const WAVE_FREQUENCY = 3;
+      const WAVE_SPEED = 0.04;
+      const ENABLE_MOUSE_INTERACTION = true;
+      const MOUSE_RADIUS = 0.3;
+      const DISABLE_ANIMATION = false;
+
+      function compileShader(type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          console.error(gl.getShaderInfoLog(shader));
+          gl.deleteShader(shader);
+          return null;
+        }
+        return shader;
+      }
+
+      function createProgram(vsSource, fsSource) {
+        const vs = compileShader(gl.VERTEX_SHADER, vsSource);
+        const fs = compileShader(gl.FRAGMENT_SHADER, fsSource);
+        if (!vs || !fs) return null;
+        const program = gl.createProgram();
+        gl.attachShader(program, vs);
+        gl.attachShader(program, fs);
+        gl.linkProgram(program);
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+          console.error(gl.getProgramInfoLog(program));
+          return null;
+        }
+        return program;
+      }
+
+      const quadVertexShader = [
+        '#version 300 es',
+        'in vec2 position;',
+        'void main() {',
+        '  gl_Position = vec4(position, 0.0, 1.0);',
+        '}'
+      ].join('\n');
+
+      const waveFragmentShader = [
+        '#version 300 es',
+        'precision highp float;',
+        'uniform vec2 resolution;',
+        'uniform float time;',
+        'uniform float waveSpeed;',
+        'uniform float waveFrequency;',
+        'uniform float waveAmplitude;',
+        'uniform vec3 waveColor;',
+        'uniform vec2 mousePos;',
+        'uniform int enableMouseInteraction;',
+        'uniform float mouseRadius;',
+        'out vec4 fragColor;',
+        '',
+        'vec4 mod289(vec4 x) { return x - floor(x * (1.0/289.0)) * 289.0; }',
+        'vec4 permute(vec4 x) { return mod289(((x * 34.0) + 1.0) * x); }',
+        'vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }',
+        'vec2 fade(vec2 t) { return t*t*t*(t*(t*6.0-15.0)+10.0); }',
+        '',
+        'float cnoise(vec2 P) {',
+        '  vec4 Pi = floor(P.xyxy) + vec4(0.0,0.0,1.0,1.0);',
+        '  vec4 Pf = fract(P.xyxy) - vec4(0.0,0.0,1.0,1.0);',
+        '  Pi = mod289(Pi);',
+        '  vec4 ix = Pi.xzxz;',
+        '  vec4 iy = Pi.yyww;',
+        '  vec4 fx = Pf.xzxz;',
+        '  vec4 fy = Pf.yyww;',
+        '  vec4 i = permute(permute(ix) + iy);',
+        '  vec4 gx = fract(i * (1.0/41.0)) * 2.0 - 1.0;',
+        '  vec4 gy = abs(gx) - 0.5;',
+        '  vec4 tx = floor(gx + 0.5);',
+        '  gx = gx - tx;',
+        '  vec2 g00 = vec2(gx.x, gy.x);',
+        '  vec2 g10 = vec2(gx.y, gy.y);',
+        '  vec2 g01 = vec2(gx.z, gy.z);',
+        '  vec2 g11 = vec2(gx.w, gy.w);',
+        '  vec4 norm = taylorInvSqrt(vec4(dot(g00,g00), dot(g01,g01), dot(g10,g10), dot(g11,g11)));',
+        '  g00 *= norm.x; g01 *= norm.y; g10 *= norm.z; g11 *= norm.w;',
+        '  float n00 = dot(g00, vec2(fx.x, fy.x));',
+        '  float n10 = dot(g10, vec2(fx.y, fy.y));',
+        '  float n01 = dot(g01, vec2(fx.z, fy.z));',
+        '  float n11 = dot(g11, vec2(fx.w, fy.w));',
+        '  vec2 fade_xy = fade(Pf.xy);',
+        '  vec2 n_x = mix(vec2(n00, n01), vec2(n10, n11), fade_xy.x);',
+        '  return 2.3 * mix(n_x.x, n_x.y, fade_xy.y);',
+        '}',
+        '',
+        'const int OCTAVES = 4;',
+        'float fbm(vec2 p) {',
+        '  float value = 0.0;',
+        '  float amp = 1.0;',
+        '  float freq = waveFrequency;',
+        '  for (int i = 0; i < OCTAVES; i++) {',
+        '    value += amp * abs(cnoise(p));',
+        '    p *= freq;',
+        '    amp *= waveAmplitude;',
+        '  }',
+        '  return value;',
+        '}',
+        '',
+        'float pattern(vec2 p) {',
+        '  vec2 p2 = p - time * waveSpeed;',
+        '  return fbm(p + fbm(p2));',
+        '}',
+        '',
+        'void main() {',
+        '  vec2 uv = gl_FragCoord.xy / resolution.xy;',
+        '  uv -= 0.5;',
+        '  uv.x *= resolution.x / resolution.y;',
+        '  float f = pattern(uv);',
+        '  if (enableMouseInteraction == 1) {',
+        '    vec2 mouseNDC = (mousePos / resolution - 0.5) * vec2(1.0, -1.0);',
+        '    mouseNDC.x *= resolution.x / resolution.y;',
+        '    float dist = length(uv - mouseNDC);',
+        '    float effect = 1.0 - smoothstep(0.0, mouseRadius, dist);',
+        '    f -= 0.5 * effect;',
+        '  }',
+        '  vec3 col = mix(vec3(0.0), waveColor, f);',
+        '  fragColor = vec4(col, 1.0);',
+        '}'
+      ].join('\n');
+
+      const ditherFragmentShader = [
+        '#version 300 es',
+        'precision highp float;',
+        'uniform sampler2D inputBuffer;',
+        'uniform vec2 resolution;',
+        'uniform float colorNum;',
+        'uniform float pixelSize;',
+        'out vec4 fragColor;',
+        '',
+        'const float bayerMatrix8x8[64] = float[64](',
+        '  0.0/64.0, 48.0/64.0, 12.0/64.0, 60.0/64.0,  3.0/64.0, 51.0/64.0, 15.0/64.0, 63.0/64.0,',
+        '  32.0/64.0,16.0/64.0, 44.0/64.0, 28.0/64.0, 35.0/64.0,19.0/64.0, 47.0/64.0, 31.0/64.0,',
+        '  8.0/64.0, 56.0/64.0,  4.0/64.0, 52.0/64.0, 11.0/64.0,59.0/64.0,  7.0/64.0, 55.0/64.0,',
+        '  40.0/64.0,24.0/64.0, 36.0/64.0, 20.0/64.0, 43.0/64.0,27.0/64.0, 39.0/64.0, 23.0/64.0,',
+        '  2.0/64.0, 50.0/64.0, 14.0/64.0, 62.0/64.0,  1.0/64.0,49.0/64.0, 13.0/64.0, 61.0/64.0,',
+        '  34.0/64.0,18.0/64.0, 46.0/64.0, 30.0/64.0, 33.0/64.0,17.0/64.0, 45.0/64.0, 29.0/64.0,',
+        '  10.0/64.0,58.0/64.0,  6.0/64.0, 54.0/64.0,  9.0/64.0,57.0/64.0,  5.0/64.0, 53.0/64.0,',
+        '  42.0/64.0,26.0/64.0, 38.0/64.0, 22.0/64.0, 41.0/64.0,25.0/64.0, 37.0/64.0, 21.0/64.0',
+        ');',
+        '',
+        'vec3 dither(vec2 uv, vec3 color) {',
+        '  vec2 scaledCoord = floor(uv * resolution / pixelSize);',
+        '  int x = int(mod(scaledCoord.x, 8.0));',
+        '  int y = int(mod(scaledCoord.y, 8.0));',
+        '  float threshold = bayerMatrix8x8[y * 8 + x] - 0.25;',
+        '  float step = 1.0 / (colorNum - 1.0);',
+        '  color += threshold * step;',
+        '  float bias = 0.2;',
+        '  color = clamp(color - bias, 0.0, 1.0);',
+        '  return floor(color * (colorNum - 1.0) + 0.5) / (colorNum - 1.0);',
+        '}',
+        '',
+        'void main() {',
+        '  vec2 uv = gl_FragCoord.xy / resolution.xy;',
+        '  vec2 normalizedPixelSize = pixelSize / resolution;',
+        '  vec2 uvPixel = normalizedPixelSize * floor(uv / normalizedPixelSize);',
+        '  vec4 color = texture(inputBuffer, uvPixel);',
+        '  color.rgb = dither(uv, color.rgb);',
+        '  fragColor = color;',
+        '}'
+      ].join('\n');
+
+      const waveProgram = createProgram(quadVertexShader, waveFragmentShader);
+      const ditherProgram = createProgram(quadVertexShader, ditherFragmentShader);
+      if (!waveProgram || !ditherProgram) return;
+
+      const quadBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+
+      function bindQuad(program) {
+        const loc = gl.getAttribLocation(program, 'position');
+        gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
+        gl.enableVertexAttribArray(loc);
+        gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      }
+
+      const waveUniforms = {
+        resolution: gl.getUniformLocation(waveProgram, 'resolution'),
+        time: gl.getUniformLocation(waveProgram, 'time'),
+        waveSpeed: gl.getUniformLocation(waveProgram, 'waveSpeed'),
+        waveFrequency: gl.getUniformLocation(waveProgram, 'waveFrequency'),
+        waveAmplitude: gl.getUniformLocation(waveProgram, 'waveAmplitude'),
+        waveColor: gl.getUniformLocation(waveProgram, 'waveColor'),
+        mousePos: gl.getUniformLocation(waveProgram, 'mousePos'),
+        enableMouseInteraction: gl.getUniformLocation(waveProgram, 'enableMouseInteraction'),
+        mouseRadius: gl.getUniformLocation(waveProgram, 'mouseRadius')
+      };
+
+      const ditherUniforms = {
+        resolution: gl.getUniformLocation(ditherProgram, 'resolution'),
+        colorNum: gl.getUniformLocation(ditherProgram, 'colorNum'),
+        pixelSize: gl.getUniformLocation(ditherProgram, 'pixelSize'),
+        inputBuffer: gl.getUniformLocation(ditherProgram, 'inputBuffer')
+      };
+
+      let sceneTexture = gl.createTexture();
+      let framebuffer = gl.createFramebuffer();
+
+      function setupTexture(w, h) {
+        gl.bindTexture(gl.TEXTURE_2D, sceneTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, sceneTexture, 0);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      }
+
+      let width = 0;
+      let height = 0;
+
+      function resize() {
+        const w = Math.max(1, Math.floor(canvas.clientWidth));
+        const h = Math.max(1, Math.floor(canvas.clientHeight));
+        if (w === width && h === height) return;
+        width = w;
+        height = h;
+        canvas.width = w;
+        canvas.height = h;
+        setupTexture(w, h);
+      }
+
+      const mousePos = { x: 0, y: 0 };
+      window.addEventListener('mousemove', function (e) {
+        const rect = canvas.getBoundingClientRect();
+        mousePos.x = (e.clientX - rect.left) * (canvas.width / rect.width);
+        mousePos.y = (e.clientY - rect.top) * (canvas.height / rect.height);
+      });
+
+      window.addEventListener('resize', resize);
+      resize();
+
+      const startTime = performance.now();
+
+      function render() {
+        resize();
+        const time = DISABLE_ANIMATION ? 0 : (performance.now() - startTime) / 1000;
+
+        // Pass 1: render the wave pattern into the offscreen texture
+        gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+        gl.viewport(0, 0, width, height);
+        gl.useProgram(waveProgram);
+        bindQuad(waveProgram);
+        gl.uniform2f(waveUniforms.resolution, width, height);
+        gl.uniform1f(waveUniforms.time, time);
+        gl.uniform1f(waveUniforms.waveSpeed, WAVE_SPEED);
+        gl.uniform1f(waveUniforms.waveFrequency, WAVE_FREQUENCY);
+        gl.uniform1f(waveUniforms.waveAmplitude, WAVE_AMPLITUDE);
+        gl.uniform3f(waveUniforms.waveColor, WAVE_COLOR[0], WAVE_COLOR[1], WAVE_COLOR[2]);
+        gl.uniform2f(waveUniforms.mousePos, mousePos.x, mousePos.y);
+        gl.uniform1i(waveUniforms.enableMouseInteraction, ENABLE_MOUSE_INTERACTION ? 1 : 0);
+        gl.uniform1f(waveUniforms.mouseRadius, MOUSE_RADIUS);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+        // Pass 2: dither the rendered texture to the screen
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.viewport(0, 0, width, height);
+        gl.useProgram(ditherProgram);
+        bindQuad(ditherProgram);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, sceneTexture);
+        gl.uniform1i(ditherUniforms.inputBuffer, 0);
+        gl.uniform2f(ditherUniforms.resolution, width, height);
+        gl.uniform1f(ditherUniforms.colorNum, COLOR_NUM);
+        gl.uniform1f(ditherUniforms.pixelSize, PIXEL_SIZE);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+        requestAnimationFrame(render);
+      }
+
+      requestAnimationFrame(render);
+    })();
+
     const mv = document.getElementById('mv');
 
     // Base orbit — horizontal angle, vertical angle
@@ -248,6 +560,51 @@
         win.style.left = Math.max(0, (window.innerWidth - w) / 2) + 'px';
         win.style.top = Math.max(0, (window.innerHeight - h) / 2 - 20) + 'px';
         bringToFront(win);
+        if (id === 'contact-window') {
+          startContactTypewriter();
+        }
+      }
+
+      // Retro video-game style typewriter effect for the contact intro line
+      // (ported from reactbits.dev's TextType component)
+      let typewriterRun = 0;
+      function startContactTypewriter() {
+        const container = document.getElementById('contact-intro');
+        if (!container) return;
+
+        const MIN_SPEED = 10;
+        const MAX_SPEED = 40;
+
+        const pre = container.querySelector('[data-part="pre"]');
+        const link = container.querySelector('[data-part="link"]');
+        const post = container.querySelector('[data-part="post"]');
+
+        const PRE_TEXT = 'hi, i’m dhriti arjun, part musician and artist, part data scientist. i like to use data and technology to explore what it means to be human in the age of ai. learn more about me ';
+        const LINK_TEXT = 'here';
+        const POST_TEXT = '.';
+
+        pre.textContent = '';
+        link.textContent = '';
+        post.textContent = '';
+
+        const queue = [];
+        for (const ch of PRE_TEXT) queue.push([pre, ch]);
+        for (const ch of LINK_TEXT) queue.push([link, ch]);
+        for (const ch of POST_TEXT) queue.push([post, ch]);
+
+        const runId = ++typewriterRun;
+        let i = 0;
+
+        function step() {
+          if (runId !== typewriterRun) return;
+          if (i >= queue.length) return;
+          const [el, ch] = queue[i++];
+          el.textContent += ch;
+          const delay = MIN_SPEED + Math.random() * (MAX_SPEED - MIN_SPEED);
+          setTimeout(step, delay);
+        }
+
+        step();
       }
 
       function closeWindow(id) {
@@ -294,14 +651,6 @@
         });
       });
 
-      const aboutLink = document.getElementById('nav-about');
-      if (aboutLink) {
-        aboutLink.addEventListener('click', function (e) {
-          e.preventDefault();
-          openWindow('about-window');
-        });
-      }
-
       const contactLink = document.getElementById('nav-contact');
       if (contactLink) {
         contactLink.addEventListener('click', function (e) {
@@ -310,11 +659,9 @@
         });
       }
 
-      // Backlink support: arriving from another page via #about or #contact
-      // opens the matching window automatically.
-      if (window.location.hash === '#about') {
-        openWindow('about-window');
-      } else if (window.location.hash === '#contact') {
+      // Backlink support: arriving from another page via #contact
+      // opens the contact window automatically.
+      if (window.location.hash === '#contact') {
         openWindow('contact-window');
       }
     })();
